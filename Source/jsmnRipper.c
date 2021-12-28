@@ -139,13 +139,27 @@ bool lastToken(jsmntok_t * jsmnToken)
 	return !(jsmnToken->start + jsmnToken->end + jsmnToken->size + jsmnToken->parent);
 }
 
-/*
+/**
  * Structural Function. Jumps to the token which starts at the next position given by newPosition.
+ * @param jsonToken jsmntok_t**
+ * @param newPosition int
+ * @return false (0) if there aren't any more tokens, true (any number) if there are one more
  */
 bool jumpToTokenPos(jsmntok_t ** jsonToken, int newPosition)
 {
 	bool retVal = false;
-	while (((jsmntok_t *)(*jsonToken))->start < newPosition) retVal = nextToken(jsonToken);
+	while (((jsmntok_t *)(*jsonToken))->start < newPosition)
+	{
+		retVal = nextToken(jsonToken);
+		if (retVal == 0) break;
+		/* TRACE * /
+		TRACE("**************** newPosition:%d", newPosition);
+		TRACE("**************** jsonToken->start:%d", ((jsmntok_t *)(*jsonToken))->start);
+		TRACE("**************** retVal:%d", retVal);
+		if ((((jsmntok_t *)(*jsonToken))->start) == 0) exit(1000);
+		/* TRACE */
+
+	}
 	return retVal;
 }
 
